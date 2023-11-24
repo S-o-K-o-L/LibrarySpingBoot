@@ -2,12 +2,11 @@ package com.example.library.controller;
 
 import com.example.library.domain.entity.Book;
 import com.example.library.service.BookService;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
+
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,17 +22,15 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping
-    @Cacheable
-    public List<Book> findAllBook() {
-        return bookService.findAll();
-    }
+
 
     @GetMapping("/{id}")
     @Cacheable
     public Optional<Book> findBookById(@PathVariable("id") Long id) {
         return bookService.findBookById(id);
     }
+
+
 
     @PostMapping
     @Cacheable(key = "#book.name")
@@ -47,6 +44,11 @@ public class BookController {
         return bookService.updateBook(id, book);
     }
 
+    @GetMapping()
+    @CachePut(key = "#book.name")
+    public List<String> fuzzySearch(@RequestBody Book string) {
+        return bookService.fuzzySearchByName(string);
+    }
     @DeleteMapping("/{id}")
     @CacheEvict
     public void deleteBook(@PathVariable("id") Long id) {

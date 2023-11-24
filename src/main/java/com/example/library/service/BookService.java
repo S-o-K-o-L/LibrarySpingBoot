@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @Service
 public interface BookService {
@@ -13,6 +12,7 @@ public interface BookService {
     Book saveBook(Book book);
     Optional<Book> findBookByName(String name);
     Book updateBook(Long id, Book book);
+    List<String> fuzzySearchByName(Book book);
     void deleteBook(Long id);
     List<Book> findAll();
     Integer countReadUsers(Long id);

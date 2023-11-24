@@ -1,6 +1,5 @@
 package com.example.library.service.impl;
 
-import com.example.library.controller.BookController;
 import com.example.library.domain.entity.Book;
 import com.example.library.repository.BookRepository;
 import com.example.library.service.BookService;
@@ -9,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -44,6 +44,14 @@ public class BookServiceImpl implements BookService {
         bookForUpdate.setUserBooks(book.getUserBooks());
         bookForUpdate.setBookChapters(book.getBookChapters());
         return bookRepository.save(bookForUpdate);
+    }
+
+    @Override
+    public List<String> fuzzySearchByName(Book book) {
+        return bookRepository.fuzzySearchBookByName(book.getName())
+                .stream()
+                .map(Book::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
